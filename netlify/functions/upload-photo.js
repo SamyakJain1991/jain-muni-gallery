@@ -52,7 +52,15 @@ body: JSON.stringify({ error: 'Failed to upload photo' })
 
 const parseMultipartForm = async (event) => {
 const contentType = event.headers['content-type'];
+if (!contentType || !contentType.includes('multipart/form-data')) {
+throw new Error('Invalid content type, expected multipart/form-data');
+}
+
 const boundary = contentType.split('boundary=')[1];
+if (!boundary) {
+throw new Error('Boundary not found in content-type');
+}
+
 const parts = event.body.split(`--${boundary}`);
 const files = {};
 
@@ -61,7 +69,9 @@ if (part.includes('Content-Disposition')) {
 const nameMatch = part.match(/name="([^"]+)"/);
 const filenameMatch = part.match(/filename="([^"]+)"/);
 const contentTypeMatch = part.match(/Content-Type: ([\w\/]+)/);
-const content = part.split('\r\n\r\n')[1]?.split('\r\n--')[0];
+const contentStart = part.indexOf('\r\n\r\n') + 4;
+const contentEnd = part.lastIndexOf('\r\n--');
+const content = part.substring(contentStart, contentEnd);
 
 if (nameMatch && content) {
 files[nameMatch[1]] = {
@@ -73,5 +83,10 @@ content: Buffer.from(content, 'base64')
 }
 }
 
+if (!files.photo) {
+throw new Error('No file found in form data');
+}
+
 return { files };
 };
+
