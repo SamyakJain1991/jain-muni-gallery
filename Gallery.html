@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery - Jansat Family</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #fff; }
+header { background: #FF9933; color: white; padding: 10px; text-align: center; }
+nav { background: #FAFAF4; padding: 10px; }
+nav a { margin: 0 15px; text-decoration: none; color: #333; }
+nav a:hover { color: #FF9933; }
+.content { padding: 20px; text-align: center; }
+.gallery {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+gap: 15px;
+padding: 20px;
+}
+.gallery-item {
+position: relative;
+}
+.gallery img {
+max-width: 100%;
+height: auto;
+border-radius: 5px;
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.delete-btn {
+display: none;
+position: absolute;
+top: 5px;
+right: 5px;
+background: red;
+color: white;
+border: none;
+border-radius: 3px;
+cursor: pointer;
+padding: 5px;
+}
+.gallery-item:hover .delete-btn {
+display: block;
+}
+.admin-section { margin: 20px 0; }
+.admin-section input { margin: 5px; }
+</style>
+</head>
+<body>
+<header>
+<h1>Welcome to Jansat Family</h1>
+</header>
+<nav>
+<a href="home.html">Home</a>
+<a href="profiles.html">Profiles</a>
+<a href="programmes.html">Programmes</a>
+<a href="gallery.html">Gallery</a>
+<a href="contact.html">Contact</a>
+</nav>
+<div class="content">
+<h2>Gallery</h2>
+<div class="admin-section" id="adminSection" style="display: none;">
+<h3>Please Send Photo to Samyak Jain for Upload </h3>
+<input type="password" id="adminPassword" placeholder="Enter Admin Password">
+<button onclick="checkPassword()">Login</button>
+<form id="uploadForm" style="display: none;" enctype="multipart/form-data">
+<input type="file" id="photoInput" accept="image/*" required>
+<button type="submit">Upload Photo</button>
+</form>
+</div>
+<button onclick="showAdminSection()">Admin Access</button>
+<div class="gallery" id="gallery">
+<!-- Uploaded images yahan dynamically add honge -->
+</div>
+</div>
+<script>
+let isAdmin = false;
+
+function showAdminSection() {
+document.getElementById('adminSection').style.display = 'block';
+}
+
+function checkPassword() {
+const password = document.getElementById('adminPassword').value;
+if (password === 'admin123') { // Yeh password change kar dena
+isAdmin = true;
+document.getElementById('uploadForm').style.display = 'block';
+document.getElementById('adminPassword').style.display = 'none';
+document.getElementById('adminSection').querySelector('button').style.display = 'none';
+document.querySelectorAll('.delete-btn').forEach(btn => btn.style.display = 'block');
+} else {
+alert('Incorrect password!');
+}
+}
+
+document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+e.preventDefault();
+const fileInput = document.getElementById('photoInput');
+const file = fileInput.files[0];
+if (!file) return;
+
+const formData = new FormData();
+formData.append('photo', file);
+
+try {
+const response = await fetch('/.netlify/functions/upload-photo', {
+method: 'POST',
+body: formData
+});
+const result = await response.json();
+if (result.url && result.filePath) {
+const galleryItem = document.createElement('div');
+galleryItem.className = 'gallery-item';
+const img = document.createElement('img');
+img.src = result.url;
+img.alt = 'Uploaded Photo';
+const deleteBtn = document.createElement('button');
+deleteBtn.className = 'delete-btn';
+deleteBtn.textContent = 'Delete';
+deleteBtn.dataset.filePath = result.filePath;
+deleteBtn.onclick = () => deletePhoto(result.filePath, galleryItem);
+galleryItem.appendChild(img);
+galleryItem.appendChild(deleteBtn);
+document.getElementById('gallery').appendChild(galleryItem);
+alert('Photo uploaded successfully!');
+} else {
+alert('Upload failed!');
+}
+} catch (error) {
+console.error('Error:', error);
+alert('Error uploading photo!');
+}
+});
+
+async function deletePhoto(filePath, galleryItem) {
+if (!isAdmin) {
+alert('You need to be logged in as admin to delete photos!');
+return;
+}
+
+try {
+const response = await fetch('/.netlify/functions/delete-photo', {
+method: 'POST',
+body: JSON.stringify({ filePath }),
+headers: { 'Content-Type': 'application/json' }
+});
+const result = await response.json();
+if (result.success) {
+galleryItem.remove();
+alert('Photo deleted successfully!');
+} else {
+alert('Delete failed!');
+}
+} catch (error) {
+console.error('Error:', error);
+alert('Error deleting photo!');
+}
+}
+</script>
+</body>
+</html>
