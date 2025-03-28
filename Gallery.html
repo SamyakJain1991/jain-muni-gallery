@@ -92,12 +92,11 @@ alert('Incorrect password!');
 }
 }
 
-document.getElementById('uploadForm').addEventListener('submit', async (e) => {
-e.preventDefault();
+document.getElementById('uploadForm').addEventListener('submit', async functio uploadPhoto() {
 const fileInput = document.getElementById('photoInput');
 const file = fileInput.files[0];
 if (!file) return;
-
+  } 
 const formData = new FormData();
 formData.append('photo', file);
 
