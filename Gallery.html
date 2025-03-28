@@ -3,96 +3,115 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gallery - Jansat Family</title>
+<title>Gallery - Jain Muni</title>
 <style>
-body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #fff; }
-header { background: #FF9933; color: white; padding: 10px; text-align: center; }
-nav { background: #FAFAF4; padding: 10px; }
-nav a { margin: 0 15px; text-decoration: none; color: #333; }
-nav a:hover { color: #FF9933; }
-.content { padding: 20px; text-align: center; }
-.gallery {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-gap: 15px;
+body {
+font-family: Arial, sans-serif;
+margin: 0;
 padding: 20px;
+background-color: #f4f4f4;
 }
-.gallery-item {
+h1 {
+text-align: center;
+color: #333;
+}
+#adminAccess {
+text-align: center;
+margin-bottom: 20px;
+}
+#adminAccess input {
+padding: 10px;
+margin-right: 10px;
+}
+#adminAccess button {
+padding: 10px 20px;
+background-color: #007bff;
+color: white;
+border: none;
+cursor: pointer;
+}
+#adminAccess button:hover {
+background-color: #0056b3;
+}
+#uploadSection {
+display: none;
+text-align: center;
+margin-bottom: 20px;
+}
+#uploadSection input[type="file"] {
+margin: 10px;
+}
+#uploadSection button {
+padding: 10px 20px;
+background-color: #28a745;
+color: white;
+border: none;
+cursor: pointer;
+}
+#uploadSection button:hover {
+background-color: #218838;
+}
+#gallery {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+gap: 20px;
+}
+.photo {
 position: relative;
+width: 200px;
+text-align: center;
 }
-.gallery img {
-max-width: 100%;
+.photo img {
+width: 100%;
 height: auto;
 border-radius: 5px;
-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 .delete-btn {
-display: none;
 position: absolute;
 top: 5px;
 right: 5px;
-background: red;
+background-color: #dc3545;
 color: white;
 border: none;
-border-radius: 3px;
+padding: 5px 10px;
 cursor: pointer;
-padding: 5px;
+border-radius: 3px;
 }
-.gallery-item:hover .delete-btn {
-display: block;
+.delete-btn:hover {
+background-color: #c82333;
 }
-.admin-section { margin: 20px 0; }
-.admin-section input { margin: 5px; }
 </style>
 </head>
 <body>
-<header>
-<h1>Welcome to Jansat Family</h1>
-</header>
-<nav>
-<a href="jansant1.html">Home</a>
-<a href="profiles.html">Profiles</a>
-<a href="programmes.html">Programmes</a>
-<a href="gallery.html">Gallery</a>
-<a href="contact.html">Contact</a>
-</nav>
-<div class="content">
-<h2>Gallery</h2>
-<div class="admin-section" id="adminSection" style="display: none;">
-<h3>Please Send Photo to Samyak Jain for Upload </h3>
-<input type="password" id="adminPassword" placeholder="Enter Admin Password">
-<button onclick="checkPassword()">Login</button>
-<form id="uploadForm" style="display: none;" enctype="multipart/form-data">
-<input type="file" id="photoInput" accept="image/*" required>
-<button type="submit">Upload Photo</button>
+<h1>Gallery</h1>
+
+<div id="adminAccess">
+<input type="password" id="passwordInput" placeholder="Enter admin password">
+<button onclick="checkPassword()">Admin Access</button>
+</div>
+
+<div id="uploadSection">
+<form id="uploadForm" enctype="multipart/form-data">
+<input type="file" id="photoInput" accept="image/*">
+<button type="button" onclick="uploadPhoto()">Upload Photo</button>
 </form>
 </div>
-<button onclick="showAdminSection()">Admin Access</button>
-<div class="gallery" id="gallery">
-<!-- Uploaded images yahan dynamically add honge -->
-</div>
-</div>
+
+<div id="gallery"></div>
+
 <script>
-let isAdmin = false;
-
-function showAdminSection() {
-document.getElementById('adminSection').style.display = 'block';
-}
-
 function checkPassword() {
-const password = document.getElementById('adminPassword').value;
-if (password === 'admin123') { // Yeh password change kar dena
-isAdmin = true;
-document.getElementById('uploadForm').style.display = 'block';
-document.getElementById('adminPassword').style.display = 'none';
-document.getElementById('adminSection').querySelector('button').style.display = 'none';
-document.querySelectorAll('.delete-btn').forEach(btn => btn.style.display = 'block');
+const password = document.getElementById('passwordInput').value;
+if (password === 'admin123') {
+document.getElementById('adminAccess').style.display = 'none';
+document.getElementById('uploadSection').style.display = 'block';
+loadGallery();
 } else {
 alert('Incorrect password!');
 }
 }
 
-document.getElementById('uploadForm').addEventListener('submit', 
 async function uploadPhoto() {
 const fileInput = document.getElementById('photoInput');
 const file = fileInput.files[0];
@@ -121,6 +140,7 @@ photoDiv.innerHTML = `
 `;
 gallery.appendChild(photoDiv);
 alert('Photo uploaded successfully!');
+fileInput.value = ''; // Clear the input
 } else {
 alert('Upload failed!');
 }
@@ -130,31 +150,43 @@ alert('Error uploading photo!');
 }
 }
 
-                                                       
-async function deletePhoto(filePath, galleryItem) {
-if (!isAdmin) {
-alert('You need to be logged in as admin to delete photos!');
-return;
-}
+async function deletePhoto(filePath) {
+if (!confirm('Are you sure you want to delete this photo?')) return;
 
 try {
 const response = await fetch('/.netlify/functions/delete-photo', {
 method: 'POST',
-body: JSON.stringify({ filePath }),
-headers: { 'Content-Type': 'application/json' }
+headers: {
+'Content-Type': 'application/json'
+},
+body: JSON.stringify({ filePath })
 });
 const result = await response.json();
+
 if (result.success) {
-galleryItem.remove();
+const gallery = document.getElementById('gallery');
+const photoDivs = gallery.getElementsByClassName('photo');
+for (let div of photoDivs) {
+if (div.querySelector('button').getAttribute('onclick').includes(filePath)) {
+gallery.removeChild(div);
+break;
+}
+}
 alert('Photo deleted successfully!');
 } else {
-alert('Delete failed!');
+alert('Failed to delete photo!');
 }
 } catch (error) {
-console.error('Error:', error);
+console.error('Error deleting photo:', error);
 alert('Error deleting photo!');
 }
+}
+
+async function loadGallery() {
+// Optional: Load existing photos from Supabase if needed
+// For now, gallery will populate as photos are uploaded
 }
 </script>
 </body>
 </html>
+
