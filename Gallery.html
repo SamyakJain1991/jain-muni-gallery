@@ -92,11 +92,15 @@ alert('Incorrect password!');
 }
 }
 
-document.getElementById('uploadForm').addEventListener('submit', async functio uploadPhoto() {
+document.getElementById('uploadForm').addEventListener('submit', 
+async function uploadPhoto() {
 const fileInput = document.getElementById('photoInput');
 const file = fileInput.files[0];
-if (!file) return;
-  } 
+if (!file) {
+alert('Please select a photo to upload!');
+return;
+}
+
 const formData = new FormData();
 formData.append('photo', file);
 
@@ -106,30 +110,27 @@ method: 'POST',
 body: formData
 });
 const result = await response.json();
+
 if (result.url && result.filePath) {
-const galleryItem = document.createElement('div');
-galleryItem.className = 'gallery-item';
-const img = document.createElement('img');
-img.src = result.url;
-img.alt = 'Uploaded Photo';
-const deleteBtn = document.createElement('button');
-deleteBtn.className = 'delete-btn';
-deleteBtn.textContent = 'Delete';
-deleteBtn.dataset.filePath = result.filePath;
-deleteBtn.onclick = () => deletePhoto(result.filePath, galleryItem);
-galleryItem.appendChild(img);
-galleryItem.appendChild(deleteBtn);
-document.getElementById('gallery').appendChild(galleryItem);
+const gallery = document.getElementById('gallery');
+const photoDiv = document.createElement('div');
+photoDiv.className = 'photo';
+photoDiv.innerHTML = `
+<img src="${result.url}" alt="Uploaded Photo">
+<button class="delete-btn" onclick="deletePhoto('${result.filePath}')">Delete</button>
+`;
+gallery.appendChild(photoDiv);
 alert('Photo uploaded successfully!');
 } else {
 alert('Upload failed!');
 }
 } catch (error) {
-console.error('Error:', error);
+console.error('Error uploading photo:', error);
 alert('Error uploading photo!');
 }
-});
+}
 
+                                                       
 async function deletePhoto(filePath, galleryItem) {
 if (!isAdmin) {
 alert('You need to be logged in as admin to delete photos!');
