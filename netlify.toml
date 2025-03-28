@@ -1,2 +1,7 @@
 [build]
     functions = "netlify/functions"
+
+    [[redirects]]
+         from = "/*"
+         to = "/jansant1.html"
+         status = 200
