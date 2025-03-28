@@ -5,7 +5,7 @@ publish = "."
 
 [[redirects]]
 from = "/*"
-to = "/jansat1.html"
+to = "/jansant1.html"
 status = 200
 
 [build.environment]
