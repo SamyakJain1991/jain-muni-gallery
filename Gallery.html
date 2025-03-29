@@ -135,14 +135,8 @@ console.log('Response from upload-photo:', result);
 
 if (result.url && result.filePath) {
 console.log('Adding photo to gallery with URL:', result.url);
-const gallery = document.getElementById('gallery');
-const photoDiv = document.createElement('div');
-photoDiv.className = 'photo';
-photoDiv.innerHTML = `
-<img src="${result.url}" alt="Uploaded Photo">
-<button class="delete-btn" onclick="deletePhoto('${result.filePath}')">Delete</button>
-`;
-gallery.appendChild(photoDiv);
+// Instead of manually adding, reload the gallery
+loadGallery();
 alert('Photo uploaded successfully!');
 fileInput.value = ''; // Clear the input
 } else {
@@ -169,14 +163,7 @@ body: JSON.stringify({ filePath })
 const result = await response.json();
 
 if (result.success) {
-const gallery = document.getElementById('gallery');
-const photoDivs = gallery.getElementsByClassName('photo');
-for (let div of photoDivs) {
-if (div.querySelector('button').getAttribute('onclick').includes(filePath)) {
-gallery.removeChild(div);
-break;
-}
-}
+loadGallery(); // Reload gallery after deletion
 alert('Photo deleted successfully!');
 } else {
 alert('Failed to delete photo!');
@@ -190,6 +177,7 @@ alert('Error deleting photo!');
 async function loadGallery() {
 try {
 const { data, error } = await fetch('/.netlify/functions/fetch-photos').then(res => res.json());
+console.log('Fetched photos:', data);
 if (error) {
 console.error('Error fetching photos:', error);
 return;
@@ -199,6 +187,7 @@ const gallery = document.getElementById('gallery');
 gallery.innerHTML = ''; // Clear existing photos
 const isAdmin = document.getElementById('uploadSection').style.display === 'block';
 
+if (data && data.length > 0) {
 data.forEach(photo => {
 const photoDiv = document.createElement('div');
 photoDiv.className = 'photo';
@@ -208,6 +197,9 @@ ${isAdmin ? `<button class="delete-btn" onclick="deletePhoto('${photo.filePath}'
 `;
 gallery.appendChild(photoDiv);
 });
+} else {
+console.log('No photos found in gallery');
+}
 } catch (error) {
 console.error('Error loading gallery:', error);
 }
