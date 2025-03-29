@@ -17,6 +17,12 @@ try {
 const formData = await parseMultipartForm(event);
 const file = formData.files.photo;
 
+console.log('File details:', {
+filename: file.filename,
+contentType: file.contentType,
+contentLength: file.content.length
+});
+
 const filePath = `public/${Date.now()}-${file.filename}`;
 console.log('Uploading file to path:', filePath);
 
@@ -62,7 +68,6 @@ body: JSON.stringify({ error: 'Failed to upload photo' })
 
 const parseMultipartForm = async (event) => {
 const contentType = event.headers['content-type'];
-console.log('Raw form data:', event.body);
 console.log('Headers:', event.headers);
 
 if (!contentType || !contentType.includes('multipart/form-data')) {
@@ -76,7 +81,6 @@ throw new Error('Boundary not found in content-type');
 
 // Decode base64-encoded body
 const decodedBody = Buffer.from(event.body, 'base64').toString('utf-8');
-console.log('Decoded form data:', decodedBody);
 
 const parts = decodedBody.split(`--${boundary}`);
 const files = {};
