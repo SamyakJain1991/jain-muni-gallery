@@ -123,6 +123,9 @@ return;
 const formData = new FormData();
 formData.append('photo', file);
 
+// Debug log to check form data before sending
+console.log('Form data being sent:', formData.get('photo'));
+
 try {
 const response = await fetch('/.netlify/functions/upload-photo', {
 method: 'POST',
@@ -189,4 +192,3 @@ async function loadGallery() {
 </script>
 </body>
 </html>
-
