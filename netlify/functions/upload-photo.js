@@ -1,13 +1,12 @@
-console.log('SUPABASE_URL:',
-process.env.SUPABASE_URL);
-console.log('SUPABASE_KEY:',
-process.env.SUPABASE_KEY);
 const { createClient } = require('@supabase/supabase-js');
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 exports.handler = async (event) => {
+console.log('SUPABASE_URL:', process.env.SUPABASE_URL);
+console.log('SUPABASE_KEY:', process.env.SUPABASE_KEY);
+
 if (event.httpMethod !== 'POST') {
 return { statusCode: 405, body: 'Method Not Allowed' };
 }
@@ -52,6 +51,9 @@ body: JSON.stringify({ error: 'Failed to upload photo' })
 
 const parseMultipartForm = async (event) => {
 const contentType = event.headers['content-type'];
+console.log('Raw form data:', event.body);
+console.log('Headers:', event.headers);
+
 if (!contentType || !contentType.includes('multipart/form-data')) {
 throw new Error('Invalid content type, expected multipart/form-data');
 }
@@ -61,7 +63,11 @@ if (!boundary) {
 throw new Error('Boundary not found in content-type');
 }
 
-const parts = event.body.split(`--${boundary}`);
+// Decode base64-encoded body
+const decodedBody = Buffer.from(event.body, 'base64').toString('utf-8');
+console.log('Decoded form data:', decodedBody);
+
+const parts = decodedBody.split(`--${boundary}`);
 const files = {};
 
 for (const part of parts) {
@@ -89,4 +95,3 @@ throw new Error('No file found in form data');
 
 return { files };
 };
-
