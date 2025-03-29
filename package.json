@@ -2,6 +2,7 @@
 "name": "jain-muni-gallery",
 "version": "1.0.0",
 "dependencies": {
-"@supabase/supabase-js": "^2.0.0"
+"@supabase/supabase-js": "^2.0.0",
+"@netlify/functions": "^2.0.0"
 }
 }
