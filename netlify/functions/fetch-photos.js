@@ -58,3 +58,4 @@ body: JSON.stringify({ error: 'Failed to fetch photos' })
 };
 }
 };
+
