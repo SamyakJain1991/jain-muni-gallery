@@ -5,6 +5,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 exports.handler = async () => {
 try {
+// List all files in the 'public' folder of the 'gallery-images' bucket
 const { data, error } = await supabase.storage
 .from('gallery-images')
 .list('public', { limit: 100 });
@@ -12,6 +13,17 @@ const { data, error } = await supabase.storage
 if (error) {
 console.log('Supabase fetch error:', error);
 throw error;
+}
+
+if (!data || data.length === 0) {
+console.log('No files found in Supabase bucket');
+return {
+statusCode: 200,
+headers: {
+'Access-Control-Allow-Origin': '*'
+},
+body: JSON.stringify([])
+};
 }
 
 console.log('Fetched files from Supabase:', data);
