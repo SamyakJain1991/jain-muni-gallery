@@ -39,10 +39,11 @@ throw error;
 
 console.log('Supabase upload successful:', data);
 
-const { publicURL } = supabase.storage
+const { data: publicUrlData } = supabase.storage
 .from('gallery-images')
 .getPublicUrl(filePath);
 
+const publicURL = publicUrlData.publicUrl;
 console.log('Public URL:', publicURL);
 
 return {
