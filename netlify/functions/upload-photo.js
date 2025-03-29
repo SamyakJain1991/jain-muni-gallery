@@ -4,6 +4,8 @@ const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 exports.handler = async (event) => {
+console.log('Function triggered with event:', event);
+
 console.log('SUPABASE_URL:', process.env.SUPABASE_URL);
 console.log('SUPABASE_KEY:', process.env.SUPABASE_KEY);
 
@@ -15,18 +17,34 @@ try {
 const formData = await parseMultipartForm(event);
 const file = formData.files.photo;
 
+console.log('File details:', {
+filename: file.filename,
+contentType: file.contentType,
+contentLength: file.content.length
+});
+
 const filePath = `public/${Date.now()}-${file.filename}`;
+console.log('Uploading file to path:', filePath);
+
 const { data, error } = await supabase.storage
 .from('gallery-images')
 .upload(filePath, file.content, {
 contentType: file.contentType
 });
 
-if (error) throw error;
+if (error) {
+console.log('Supabase upload error:', error);
+throw error;
+}
 
-const { publicURL } = supabase.storage
+console.log('Supabase upload successful:', data);
+
+const { data: publicUrlData } = supabase.storage
 .from('gallery-images')
 .getPublicUrl(filePath);
+
+const publicURL = publicUrlData.publicUrl;
+console.log('Public URL:', publicURL);
 
 return {
 statusCode: 200,
@@ -38,7 +56,7 @@ headers: {
 body: JSON.stringify({ url: publicURL, filePath })
 };
 } catch (error) {
-console.error('Error:', error);
+console.error('Error in function:', error);
 return {
 statusCode: 500,
 headers: {
@@ -51,7 +69,6 @@ body: JSON.stringify({ error: 'Failed to upload photo' })
 
 const parseMultipartForm = async (event) => {
 const contentType = event.headers['content-type'];
-console.log('Raw form data:', event.body);
 console.log('Headers:', event.headers);
 
 if (!contentType || !contentType.includes('multipart/form-data')) {
@@ -65,7 +82,6 @@ throw new Error('Boundary not found in content-type');
 
 // Decode base64-encoded body
 const decodedBody = Buffer.from(event.body, 'base64').toString('utf-8');
-console.log('Decoded form data:', decodedBody);
 
 const parts = decodedBody.split(`--${boundary}`);
 const files = {};
@@ -95,3 +111,4 @@ throw new Error('No file found in form data');
 
 return { files };
 };
+
