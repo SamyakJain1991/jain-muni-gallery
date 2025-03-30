@@ -1,21 +1,97 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profiles - जनसंत परिवार </title>
+<title>Profiles - जनसंत परिवार</title>
 <style>
-body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #fff; }
-header { background: #ff9933; color: white; padding: 10px; text-align: center; }
-nav { background: #f4f4f4; padding: 10px; text-align: center; }
-nav a { margin: 0 15px; text-decoration: none; color: #333; }
-.content { padding: 20px; text-align: center; }
-.muni-details { margin: 20px auto; max-width: 800px; padding: 15px; background: #f9f9f9; border-radius: 5px; display: flex; align-items: center; }
-.muni-details .details { flex: 1; text-align: left; }
-.muni-details ul { list-style-type: none; padding: 0; }
-.muni-details li { margin: 20px 0; line-height: 1.6; font-size: 16px; } /* Space aur font size adjust kiya */
-.muni-details li strong { margin-right: 10px; }
-.muni-details img { max-width: 300px; height: auto; border-radius: 10px; margin-left: 20px; }
+body {
+font-family: Arial, sans-serif;
+margin: 0;
+padding: 0;
+background: #fff;
+}
+header {
+background: #ff9933;
+color: white;
+padding: 10px;
+text-align: center;
+}
+nav {
+background: #f4f4f4;
+padding: 10px;
+text-align: center;
+}
+nav a {
+margin: 0 15px;
+text-decoration: none;
+color: #333;
+}
+.content {
+padding: 20px;
+text-align: center;
+}
+.muni-details {
+margin: 20px auto;
+max-width: 800px;
+padding: 15px;
+background: #f9f9f9;
+border-radius: 5px;
+display: flex;
+align-items: center;
+gap: 20px; /* Space between text and image */
+}
+.muni-details .details {
+flex: 1;
+text-align: left;
+}
+.muni-details ul {
+list-style-type: none;
+padding: 0;
+}
+.muni-details li {
+margin: 15px 0; /* Thodi kam space */
+line-height: 1.6;
+font-size: clamp(14px, 4vw, 16px); /* Font size responsive */
+}
+.muni-details li strong {
+margin-right: 10px;
+}
+.muni-details img {
+max-width: 300px;
+height: auto;
+border-radius: 10px;
+}
+
+/* Media Queries for Mobile */
+@media (max-width: 768px) {
+.muni-details {
+flex-direction: column; /* Stack text and image vertically */
+text-align: center;
+padding: 10px;
+}
+.muni-details .details {
+text-align: center; /* Center text on mobile */
+}
+.muni-details img {
+max-width: 100%; /* Full width on mobile */
+margin: 0; /* Remove extra margin */
+}
+nav a {
+margin: 5px 10px; /* Smaller margins for nav links */
+display: inline-block; /* Better spacing */
+}
+}
+
+@media (max-width: 480px) {
+header h1 {
+font-size: 1.5rem; /* Smaller header on small screens */
+}
+.content h2 {
+font-size: 1.2rem; /* Smaller heading */
+}
+}
 </style>
 </head>
 <body>
@@ -30,19 +106,19 @@ nav a { margin: 0 15px; text-decoration: none; color: #333; }
 <a href="contact.html">Contact</a>
 </nav>
 <div class="content">
-<h2>मुनि संघ का विवरण 	</h2>
+<h2>मुनि संघ का विवरण</h2>
 <div class="muni-details">
 <div class="details">
 <ul>
-<li><strong>नाम:</strong> उपाध्याय श्री विरंजन सागर जी  </li>
-<li><strong>जन्म तिथि:</strong> 12/12/1981 </li>
-<li><strong>जन्मस्थल:</strong> ग्राम सदगुवां, जिला दमोश, मध्य प्रदेश </li>
-<li><strong>छुल्लक दीक्षा:</strong> 13/02/2006 </li>
-<li><strong>मुनि दीक्षा:</strong> 18/01/2016 </li>
+<li><strong>नाम:</strong> उपाध्याय श्री विरंजन सागर जी</li>
+<li><strong>जन्म तिथि:</strong> 12/12/1981</li>
+<li><strong>जन्मस्थल:</strong> ग्राम सदगुवां, जिला दमोह , मध्य प्रदेश</li>
+<li><strong>छुल्लक दीक्षा:</strong> 13/02/2006</li>
+<li><strong>मुनि दीक्षा:</strong> 18/01/2016</li>
 <li><strong>उद्देश्य:</strong> एक समर्पित जैन मुनि जिन्होंने अहिंसा और जैन शिक्षाओं का संदेश फैलाने के लिए पूरे भारत की यात्रा की है.</li>
-<li><strong>बचपन की यादें:</strong> युवा बल्लू (कमलेश) को क्रिकेट का बहुत शौक था, वह दोस्तों के साथ गांव के मैदान में खेलता था। 
-  बल्लेबाजी और गेंदबाजी में कुशल, वह लंबे शॉट मारने में माहिर था, अक्सर विरोधी टीम पर दबाव बनाता था। 
-  आज भी उसका बल्ला कहता है, "मैदान बदल गया है, लेकिन खेल नहीं बदला है।</li>
+<li><strong>बचपन की यादें:</strong> युवा बल्लू (कमलेश) को क्रिकेट का बहुत शौक था, वह दोस्तों के साथ गांव के मैदान में खेलता था।
+बल्लेबाजी और गेंदबाजी में कुशल, वह लंबे शॉट मारने में माहिर था, अक्सर विरोधी टीम पर दबाव बनाता था।
+आज भी उसका बल्ला कहता है, "मैदान बदल गया है, लेकिन खेल नहीं बदला है।</li>
 </ul>
 </div>
 <img src="https://idqrtnrethfiekkzyfzq.supabase.co/storage/v1/object/sign/gallery-images/muni-shri.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJnYWxsZXJ5LWltYWdlcy9tdW5pLXNocmkuanBnIiwiaWF0IjoxNzQzMTc0NzExLCJleHAiOjE5MDA4NTQ3MTF9.PeNqftzrSW4OfmxAN5cAaabpYmqxsL7l4l5mkhA6lts" alt="Muni Shri Photo">
