@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 
 exports.handler = async function (event, context) {
-  const githubToken = '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';
+  const githubToken = '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';
   const repoOwner = 'SamyakJain1991';
   const repoName = 'jain-muni-gallery';
   const filePath = 'events.json';
