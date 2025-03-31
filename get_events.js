@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 exports.handler = async function (event, context) {
   const githubToken = 'YOUR_GITHUB_TOKEN'; // Replace with your GitHub Personal Access Token
   const repoOwner = 'YOUR_GITHUB_USERNAME'; // Replace with your GitHub username
-  const repoName = 'YOUR_REPO_NAME'; // Replace with your repo name
+  const repoName = 'jain-muni-gallery'; // Your repo name
   const filePath = 'events.json';
 
   const response = await fetch(
