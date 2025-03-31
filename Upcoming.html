@@ -105,7 +105,6 @@ font-size: 1.2rem;
 <div class="content">
 <h2>आगामी कार्यक्रम</h2>
 <div id="program-list"></div>
-<!-- Admin Login Section -->
 <div id="admin-login" style="margin-top: 20px;">
 <input type="password" id="admin-password" placeholder="Admin Password">
 <button onclick="checkAdmin()">Login</button>
@@ -123,9 +122,11 @@ font-size: 1.2rem;
 </div>
 
 <script>
-// Fetch events from backend
-fetch('get_events.php')
-.then(response => response.json())
+fetch('/.netlify/functions/get_events')
+.then(response => {
+if (!response.ok) throw new Error('Network response was not ok');
+return response.json();
+})
 .then(data => {
 const programList = document.getElementById('program-list');
 programList.innerHTML = '';
@@ -145,12 +146,12 @@ programList.innerHTML += `
 </div>
 `;
 });
-});
+})
+.catch(error => console.error('Error fetching events:', error));
 
-// Admin login check
 function checkAdmin() {
 const password = document.getElementById('admin-password').value;
-if (password === 'admin123') { // Change this to your desired password
+if (password === 'admin123') {
 document.getElementById('admin-login').style.display = 'none';
 document.getElementById('admin-panel').style.display = 'block';
 } else {
@@ -158,7 +159,6 @@ alert('Wrong Password!');
 }
 }
 
-// Update event
 function updateEvent() {
 const eventData = {
 name: document.getElementById('event-name').value,
@@ -169,7 +169,7 @@ organizer: document.getElementById('event-organizer').value,
 image: document.getElementById('event-image').value || 'https://via.placeholder.com/300x200'
 };
 
-fetch('update_events.php', {
+fetch('/.netlify/functions/update_events', {
 method: 'POST',
 headers: { 'Content-Type': 'application/json' },
 body: JSON.stringify(eventData)
@@ -177,8 +177,9 @@ body: JSON.stringify(eventData)
 .then(response => response.text())
 .then(data => {
 alert(data);
-location.reload(); // Refresh page to show updated events
-});
+location.reload();
+})
+.catch(error => console.error('Error updating event:', error));
 }
 </script>
 </body>
