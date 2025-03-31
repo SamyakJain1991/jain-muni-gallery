@@ -11,7 +11,7 @@ exports.handler = async function (event, context) {
     {
       headers: {
         Authorization: token ${githubToken},
-        Accept: 'application/vnd.github.v3+json',
+        Accept: 'application/vnd.github.v3+json'
       },
     }
   );
