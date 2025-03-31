@@ -37,14 +37,14 @@ exports.handler = async function (event, context) {
       body: JSON.stringify({
         message: 'Update events.json',
         content: Buffer.from(JSON.stringify(events)).toString('base64'),
-        sha: getData.sha,
+        sha: getData.sha
       }),
     }
   );
 
   return {
     statusCode: 200,
-    body: 'Event Updated Successfully!',
+    body: 'Event Updated Successfully!'
   };
 };
 
