@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Upcoming Programs - जनसंत परिवार</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 body {
 font-family: Arial, sans-serif;
@@ -117,20 +116,12 @@ font-size: 1.2rem;
 <input type="text" id="event-location" placeholder="स्थान"><br><br>
 <input type="text" id="event-description" placeholder="विवरण"><br><br>
 <input type="text" id="event-organizer" placeholder="आयोजक"><br><br>
-<input type="file" id="event-image-file" accept="image/*"><br><br>
+<input type="text" id="event-image" placeholder="Image URL"><br><br>
 <button onclick="updateEvent()">Update Event</button>
 </div>
 </div>
 
 <script>
-// Initialize Supabase client
-const { createClient } = supabase;
-const supabaseClient = createClient(
-'https://idqrtnrethfiekkzyfzq.supabase.co',
-'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkcXJ0bnJldGhmaWVra3p5ZnpxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMxNzMxMTQsImV4cCI6MjA1ODc0OTExNH0.FQZhc7fIurC4_oWhZrxe_93yYe98Bxlnc9kH1siYGLI'
-);
-
-// Fetch events from Netlify Function
 fetch('/.netlify/functions/get_events')
 .then(response => {
 if (!response.ok) throw new Error('Network response was not ok');
@@ -168,33 +159,14 @@ alert('Wrong Password!');
 }
 }
 
-async function updateEvent() {
-const eventImageFile = document.getElementById('event-image-file').files[0];
-let imageUrl = 'https://via.placeholder.com/300x200'; // Default image
-
-// Upload image to Supabase if file is selected
-if (eventImageFile) {
-const { data, error } = await supabaseClient.storage
-.from('events') // Replace 'events' with your Supabase bucket name if different
-.upload(`events/${Date.now()}_${eventImageFile.name}`, eventImageFile);
-if (error) {
-console.error('Error uploading image:', error);
-alert('Image upload failed!');
-return;
-}
-const { data: publicData } = supabaseClient.storage
-.from('events')
-.getPublicUrl(`events/${data.path}`);
-imageUrl = publicData.publicUrl;
-}
-
+function updateEvent() {
 const eventData = {
 name: document.getElementById('event-name').value,
 date: document.getElementById('event-date').value,
 location: document.getElementById('event-location').value,
 description: document.getElementById('event-description').value,
 organizer: document.getElementById('event-organizer').value,
-image: imageUrl
+image: document.getElementById('event-image').value || 'https://via.placeholder.com/300x200'
 };
 
 fetch('/.netlify/functions/update_events', {
