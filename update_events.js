@@ -2,8 +2,8 @@ const fetch = require('node-fetch');
 
 exports.handler = async function (event, context) {
   const githubToken = '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'; // Replace with your GitHub Personal Access Token
-  const repoOwner = 'YOUR_GITHUB_USERNAME'; // Replace with your GitHub username
-  const repoName = 'YOUR_REPO_NAME'; // Replace with your repo name
+  const repoOwner = 'SamyakJain1991'; // Replace with your GitHub username
+  const repoName = 'jain-muni-gallery'; // Replace with your repo name
   const filePath = 'events.json';
 
   // Get current events.json content
