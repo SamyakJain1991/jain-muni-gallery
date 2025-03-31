@@ -32,7 +32,7 @@ exports.handler = async function (event, context) {
       method: 'PUT',
       headers: {
         Authorization: token ${githubToken},
-        Accept: 'application/vnd.github.v3+json',
+        Accept: 'application/vnd.github.v3+json'
       },
       body: JSON.stringify({
         message: 'Update events.json',
