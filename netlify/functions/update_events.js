@@ -1,5 +1,5 @@
 exports.handler = async function (event, context) {
-  const githubToken = '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';
+  const githubToken = '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';
   const repoOwner = 'SamyakJain1991';
   const repoName = 'jain-muni-gallery';
   const filePath = 'events.json';
