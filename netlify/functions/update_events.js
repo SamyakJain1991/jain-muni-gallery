@@ -5,12 +5,34 @@ exports.handler = async function (event, context) {
   const filePath = 'events.json';
 
   const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
-  console.log('URL:', url);
+  const getResponse = await fetch(url, {
+    headers: {
+      Authorization: token ${githubToken},
+      Accept: 'application/vnd.github.v3+json'
+    }
+  });
+  const getData = await getResponse.json();
+  const currentContent = Buffer.from(getData.content, 'base64').toString('utf8');
+  const events = JSON.parse(currentContent);
 
-  const response = await fetch(url);
+  const newEvent = JSON.parse(event.body);
+  events.push(newEvent);
+
+  const updateResponse = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      Authorization: token ${githubToken},
+      Accept: 'application/vnd.github.v3+json'
+    },
+    body: JSON.stringify({
+      message: 'Update events.json',
+      content: Buffer.from(JSON.stringify(events)).toString('base64'),
+      sha: getData.sha
+    })
+  });
 
   return {
     statusCode: 200,
-    body: 'Fetch with Logged URL Done'
+    body: 'Event Updated Successfully!'
   };
 };
