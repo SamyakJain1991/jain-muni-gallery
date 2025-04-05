@@ -4,7 +4,7 @@ exports.handler = async function (event, context) {
   const repoName = 'jain-muni-gallery';
   const filePath = 'events.json';
 
-  const url = https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath};
+  const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
   console.log('URL:', url);
 
   const response = await fetch(url);
