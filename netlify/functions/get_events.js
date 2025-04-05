@@ -1,5 +1,5 @@
 exports.handler = async function (event, context) {
-  const githubToken = process.env.GITHUB_TOKEN1; // Environment variable se token fetch karo
+  const githubToken = process.env.GITHUB_TOKEN; // Environment variable se token fetch karo
   const repoOwner = 'SamyakJain1991';
   const repoName = 'jain-muni-gallery';
   const filePath = 'events.json';
