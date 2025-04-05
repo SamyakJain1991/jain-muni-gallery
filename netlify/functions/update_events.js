@@ -7,7 +7,7 @@ exports.handler = async function (event, context) {
   const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
   const getResponse = await fetch(url, {
     headers: {
-      Authorization: token ${githubToken},
+      Authorization: `token ${githubToken}`,
       Accept: 'application/vnd.github.v3+json'
     }
   });
@@ -21,7 +21,7 @@ exports.handler = async function (event, context) {
   const updateResponse = await fetch(url, {
     method: 'PUT',
     headers: {
-      Authorization: token ${githubToken},
+      Authorization: `token ${githubToken}`,
       Accept: 'application/vnd.github.v3+json'
     },
     body: JSON.stringify({
