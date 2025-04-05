@@ -5,17 +5,11 @@ exports.handler = async function (event, context) {
   const filePath = 'events.json';
 
   const response = await fetch(
-    https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath},
-    {
-      headers: {
-        Authorization: token ${githubToken},
-        Accept: 'application/vnd.github.v3+json'
-      }
-    }
+    https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}
   );
 
- return {
+  return {
     statusCode: 200,
-    body: 'Fetch with URL and Headers Done'
+    body: 'Fetch with URL Done'
   };
 };
