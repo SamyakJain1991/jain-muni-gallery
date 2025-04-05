@@ -1,15 +1,8 @@
 exports.handler = async function (event, context) {
-  const githubToken = process.env.GITHUB_TOKEN; // Environment variable se token fetch karo
+  const githubToken = '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'; // Yahan wahi token daal jo curl mein kaam kar raha tha
   const repoOwner = 'SamyakJain1991';
   const repoName = 'jain-muni-gallery';
   const filePath = 'events.json';
-
-  if (!githubToken) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'GitHub token not found in environment variables' })
-    };
-  }
 
   const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
   const response = await fetch(url, {
